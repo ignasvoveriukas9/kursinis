@@ -1,7 +1,6 @@
 #include "DbManager.h"
 
 #include <cstdio>
-#include <iostream>
 #include <sstream>
 #include <string>
 
@@ -15,9 +14,54 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
   return 0;
 }
 
-void DbManager::createTable() {
+static int callbackTableExist(void *data, int argc, char **argv,
+                              char **colName) {
+  *(int *)data = argc;
+  return 0;
+}
+
+// returns 0 if dosen't, 1 if dose, -1 on error
+int DbManager::doseTableExist(char *dbFile, std::string table) {
   // Open database
-  rc = sqlite3_open("test.db", &db);
+  rc = sqlite3_open(dbFile, &db);
+
+  if (rc) {
+    fprintf(stderr, "Can't open databese: %s\r\n", sqlite3_errmsg(db));
+    return -1;
+  } else {
+    fprintf(stderr, "Opened database successfully\r\n");
+  }
+
+  // SQL statement
+  std::ostringstream builder;
+  builder << "SELECT name from sqlite_master WHERE type='table' AND name='"
+          << table << "';";
+  std::string sqlString = builder.str();
+  sql = sqlString.data();
+
+  int callbackData;
+
+  // Execute SQL statement
+  rc = sqlite3_exec(db, sql, callbackTableExist, &callbackData, &zErrMsg);
+
+  if (rc != SQLITE_OK) {
+    fprintf(stderr, "SQL error: %s\r\n", zErrMsg);
+    sqlite3_free(zErrMsg);
+  }
+
+  // Close database
+  sqlite3_close(db);
+
+  if (callbackData) {
+    return 1;
+  }
+
+  return 0;
+}
+
+void DbManager::createTable(char *dbFile, std::string table) {
+  // Open database
+  rc = sqlite3_open(dbFile, &db);
 
   if (rc) {
     fprintf(stderr, "Can't open databese: %s\r\n", sqlite3_errmsg(db));
@@ -27,12 +71,14 @@ void DbManager::createTable() {
   }
 
   // SQL statement
-  sql =
-      "CREATE TABLE priceData("
-      "ticker TEXT NOT NULL,"
-      "time BIGINT NOT NULL,"
-      "openPrice REAL NOT NULL,"
-      "PRIMARY KEY (ticker, time));";
+  std::ostringstream builder;
+  builder << "CREATE TABLE " << table
+          << "(ticker TEXT NOT NULL,"
+             "time BIGINT NOT NULL,"
+             "openPrice REAL NOT NULL,"
+             "PRIMARY KEY (ticker, time));";
+  std::string sqlString = builder.str();
+  sql = sqlString.data();
 
   // Execute SQL statement
   rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
@@ -50,9 +96,16 @@ void DbManager::createTable() {
   return;
 }
 
-void DbManager::insertRow(std::string table, Price price) {
+void DbManager::insertRow(char *dbFile, std::string table, Price price) {
+  int tableExists = doseTableExist(dbFile, table);
+  if (tableExists == 0) {
+    createTable(dbFile, table);
+  } else if (tableExists == -1) {
+    return;
+  }
+
   // Open database
-  rc = sqlite3_open("test.db", &db);
+  rc = sqlite3_open(dbFile, &db);
 
   if (rc) {
     fprintf(stderr, "Can't open databese: %s\r\n", sqlite3_errmsg(db));

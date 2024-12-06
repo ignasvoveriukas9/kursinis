@@ -14,10 +14,11 @@ class DbManager {
   int rc;
   char *sql;
 
-  void createTable();
+  void createTable(char *dbFile, std::string table);
+  int doseTableExist(char *dbFile, std::string table);
 
  public:
-  void insertRow(std::string table, Price price);
+  void insertRow(char *dbFile, std::string table, Price price);
 };
 
 #endif
