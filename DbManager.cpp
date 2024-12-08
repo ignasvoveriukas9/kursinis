@@ -21,17 +21,14 @@ static int callbackTableExist(void *data, int argc, char **argv,
 }
 
 // returns 0 if dosen't, 1 if dose, -1 on error
-int DbManager::doseTableExist(char *dbFile, std::string table) {
+int DbManager::doseTableExist(std::string table) {
   // Open database
-  rc = sqlite3_open(dbFile, &db);
+  // rc = sqlite3_open(dbFile, &db);
 
-  if (rc) {
-    fprintf(stderr, "Can't open databese: %s\r\n", sqlite3_errmsg(db));
-    return -1;
-  } else {
-    fprintf(stderr, "Opened database successfully\r\n");
-  }
-
+  // if (rc) {
+  // fprintf(stderr, "Can't open databese: %s\r\n", sqlite3_errmsg(db));
+  // return -1;
+  //}
   // SQL statement
   std::ostringstream builder;
   builder << "SELECT name from sqlite_master WHERE type='table' AND name='"
@@ -39,7 +36,7 @@ int DbManager::doseTableExist(char *dbFile, std::string table) {
   std::string sqlString = builder.str();
   sql = sqlString.data();
 
-  int callbackData;
+  int callbackData = 0;
 
   // Execute SQL statement
   rc = sqlite3_exec(db, sql, callbackTableExist, &callbackData, &zErrMsg);
@@ -50,7 +47,7 @@ int DbManager::doseTableExist(char *dbFile, std::string table) {
   }
 
   // Close database
-  sqlite3_close(db);
+  // sqlite3_close(db);
 
   if (callbackData) {
     return 1;
@@ -59,16 +56,14 @@ int DbManager::doseTableExist(char *dbFile, std::string table) {
   return 0;
 }
 
-void DbManager::createTable(char *dbFile, std::string table) {
+void DbManager::createTable(std::string table) {
   // Open database
-  rc = sqlite3_open(dbFile, &db);
+  // rc = sqlite3_open(dbFile, &db);
 
-  if (rc) {
-    fprintf(stderr, "Can't open databese: %s\r\n", sqlite3_errmsg(db));
-    return;
-  } else {
-    fprintf(stderr, "Opened database successfully\r\n");
-  }
+  // if (rc) {
+  // fprintf(stderr, "Can't open databese: %s\r\n", sqlite3_errmsg(db));
+  // return;
+  //}
 
   // SQL statement
   std::ostringstream builder;
@@ -91,27 +86,26 @@ void DbManager::createTable(char *dbFile, std::string table) {
   }
 
   // Close database
-  sqlite3_close(db);
+  // sqlite3_close(db);
 
   return;
 }
 
-void DbManager::insertRow(char *dbFile, std::string table, Price price) {
-  int tableExists = doseTableExist(dbFile, table);
+void DbManager::insertRow(std::string table, Price price) {
+  // Open database
+  // rc = sqlite3_open(dbFile, &db);
+
+  // if (rc) {
+  // fprintf(stderr, "Can't open databese: %s\r\n", sqlite3_errmsg(db));
+  // return;
+  //}
+  //
+
+  int tableExists = doseTableExist(table);
   if (tableExists == 0) {
-    createTable(dbFile, table);
+    createTable(table);
   } else if (tableExists == -1) {
     return;
-  }
-
-  // Open database
-  rc = sqlite3_open(dbFile, &db);
-
-  if (rc) {
-    fprintf(stderr, "Can't open databese: %s\r\n", sqlite3_errmsg(db));
-    return;
-  } else {
-    fprintf(stderr, "Opened database successfully\r\n");
   }
 
   // SQL statement
@@ -129,12 +123,10 @@ void DbManager::insertRow(char *dbFile, std::string table, Price price) {
   if (rc != SQLITE_OK) {
     fprintf(stderr, "SQL error: %s\r\n", zErrMsg);
     sqlite3_free(zErrMsg);
-  } else {
-    fprintf(stdout, "Record created successfully\r\n");
   }
 
   // Close database
-  sqlite3_close(db);
+  // sqlite3_close(db);
 
   return;
 }
