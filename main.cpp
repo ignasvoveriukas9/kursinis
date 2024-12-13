@@ -3,6 +3,7 @@
 #include <iostream>
 #include <ostream>
 #include <string>
+#include <vector>
 
 #include "DbFiller.h"
 #include "EventDetector.h"
@@ -10,7 +11,7 @@
 
 int main() {
   // DbFiller dbFiller;
-  //  DbManager dbManager;
+  DbManager dbManager;
 
   // dbManager.insertRow("test.db", "test", Price{"tik", 177777777777, 69.69});
 
@@ -47,6 +48,15 @@ int main() {
       std::cout << "Direction Change Up" << std::to_string(prices [ i ])
                 << std::endl;
     }
+  }
+
+  std::vector<Price> priceList = dbManager.getPrices(
+      "test.db", "cryptoarchiveBTCUSDT", 1502942939, 1502943541);
+
+  for (int i = 0; i < priceList.size(); ++i) {
+    std::cout << priceList [ i ].ticker << " "
+              << std::to_string(priceList [ i ].time) << " "
+              << std::to_string(priceList [ i ].price) << std::endl;
   }
 
   std::cout << "Hello, world!" << std::endl;

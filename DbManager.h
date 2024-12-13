@@ -3,7 +3,9 @@
 
 #include <sqlite3.h>
 
+#include <cstdint>
 #include <string>
+#include <vector>
 
 #include "Price.h"
 
@@ -20,6 +22,8 @@ class DbManager {
  public:
   sqlite3 *db;
   void insertRow(std::string table, Price price);
+  std::vector<Price> getPrices(char *dbFile, std::string table,
+                               int64_t timeFrom, int64_t timeTo);
 };
 
 #endif

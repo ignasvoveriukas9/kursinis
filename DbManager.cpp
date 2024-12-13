@@ -1,8 +1,10 @@
 #include "DbManager.h"
 
+#include <cstddef>
 #include <cstdio>
 #include <sstream>
 #include <string>
+#include <vector>
 
 #include "Price.h"
 
@@ -129,4 +131,56 @@ void DbManager::insertRow(std::string table, Price price) {
   // sqlite3_close(db);
 
   return;
+}
+
+std::vector<Price> DbManager::getPrices(char *dbFile, std::string table,
+                                        int64_t timeFrom, int64_t timeTo) {
+  // Open database
+  rc = sqlite3_open(dbFile, &db);
+
+  if (rc) {
+    fprintf(stderr, "Can't open databese: %s\r\n", sqlite3_errmsg(db));
+    return std::vector<Price>();
+  }
+
+  // SQL statement
+  std::ostringstream builder;
+  builder << "SELECT * FROM " << table << " WHERE time > "
+          << std::to_string(timeFrom) << " AND time < "
+          << std::to_string(timeTo) << ";";
+
+  std::string sqlString = builder.str();
+  sql = sqlString.data();
+
+  std::vector<Price> list;
+  sqlite3_stmt *stmt;
+
+  rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+
+  if (rc != SQLITE_OK) {
+    fprintf(stderr, "SQL error: %s\r\n", sqlite3_errmsg(db));
+    return std::vector<Price>();
+  }
+
+  while (true) {
+    rc = sqlite3_step(stmt);
+    if (rc == SQLITE_DONE) {
+      break;
+    }
+    if (rc != SQLITE_ROW) {
+      fprintf(stderr, "SQL error: %s\r\n", sqlite3_errmsg(db));
+      break;
+    }
+
+    Price price;
+    const char *ticker = (const char *)sqlite3_column_text(stmt, 0);
+    price.ticker = ticker ? ticker : "";
+    price.time = sqlite3_column_int(stmt, 1);
+    price.price = sqlite3_column_double(stmt, 2);
+    list.push_back(price);
+  }
+
+  sqlite3_finalize(stmt);
+
+  return list;
 }
