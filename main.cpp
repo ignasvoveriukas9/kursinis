@@ -5,7 +5,8 @@
 #include <string>
 #include <vector>
 
-#include "DbFiller.h"
+#include "CoastlineTrader.h"
+#include "DbManager.h"
 #include "EventDetector.h"
 #include "Price.h"
 
@@ -19,6 +20,8 @@ int main() {
   //"test.db", "cryptoarchiveSOLUSDT", "../../data/SOLUSDT.csv", "SOLUSDT");
 
   // std::cout << std::to_string(count) << std::endl;
+  //
+  /*
 
   EventDetector eventDetector = EventDetector(0.0025);
 
@@ -57,6 +60,16 @@ int main() {
     std::cout << priceList [ i ].ticker << " "
               << std::to_string(priceList [ i ].time) << " "
               << std::to_string(priceList [ i ].price) << std::endl;
+  }
+  */
+
+  CoastlineTrader coastlineTrader = CoastlineTrader(0.01, true);
+
+  std::vector<Price> priceList = dbManager.getPrices(
+      "test.db", "cryptoarchiveBTCUSDT", 1502942939, 1503002341);
+
+  for (int i = 0; i < priceList.size(); ++i) {
+    coastlineTrader.run(priceList [ i ]);
   }
 
   std::cout << "Hello, world!" << std::endl;

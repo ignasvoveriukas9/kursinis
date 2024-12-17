@@ -10,7 +10,7 @@ TARGET = main
 TARGET_DEL = main
 
 # Source files
-SRCS = main.cpp DbManager.cpp DbFiller.cpp EventDetector.cpp
+SRCS = main.cpp DbManager.cpp DbFiller.cpp EventDetector.cpp CoastlineTrader.cpp
 
 # Object files
 OBJS = $(SRCS:.cpp=.o)
