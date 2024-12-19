@@ -16,7 +16,7 @@ class EventDetector {
 
  public:
   EventDetector(double delta);
-  int getIntrinsicEvent(double price);
+  int detectEvent(double price);
 };
 
 #endif

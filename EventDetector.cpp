@@ -9,7 +9,7 @@ void EventDetector::init(double price) {
   initalized = true;
 }
 
-int EventDetector::getIntrinsicEvent(double price) {
+int EventDetector::detectEvent(double price) {
   if (!initalized) {
     init(price);
   }
