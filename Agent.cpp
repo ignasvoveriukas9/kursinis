@@ -5,15 +5,21 @@
 #include "CoastlineTrader.h"
 #include "EventDetector.h"
 #include "Price.h"
+#include "ProbabilityIndicator.h"
 
-Agent::Agent(bool mode, double delta)
-    : eventDetector(delta), coastlineTrader(mode), mode(mode) {}
+Agent::Agent(bool mode, double deltaUp, double deltaDown)
+    : eventDetector(deltaUp, deltaDown),
+      coastlineTrader(mode),
+      mode(mode),
+      probabilityIndicator(50.0, deltaUp) {}
 
 void Agent::run(Price price) {
   int intrinsicEvent = eventDetector.detectEvent(price.price);
   int action = coastlineTrader.run(intrinsicEvent);
 
-  // TODO implement liquidity
+  int probabilityIndicatorEvent =
+      eventDetector.detectProbabilityIndicatorEvent(price.price);
+  probabilityIndicator.updateProbabilityIndicator(probabilityIndicatorEvent);
 
   if (action == 1) {
     // TODO implement buy

@@ -6,17 +6,20 @@
 #include <random>
 class EventDetector {
  private:
-  int mode;
-  double extreme;
-  double referance;
-  double delta;
+  int mode, modeProb;
+  double extreme, extremeProb;
+  double referance, referanceProb;
   bool initalized = false;
+  bool initalizedProb = false;
+  double deltaUp, deltaDown;
 
   void init(double price);
+  void initProb(double price);
 
  public:
-  EventDetector(double delta);
+  EventDetector(double deltaUp, double deltaDown);
   int detectEvent(double price);
+  int detectProbabilityIndicatorEvent(double price);
 };
 
 #endif

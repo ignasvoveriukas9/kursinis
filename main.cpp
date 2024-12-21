@@ -12,7 +12,7 @@
 int main() {
   DbManager dbManager;
 
-  Agent agent = Agent(true, 0.01);
+  Agent agent = Agent(true, 0.01, 0.01);
 
   std::vector<Price> priceList = dbManager.getPrices(
       "test.db", "cryptoarchiveBTCUSDT", 1502942939, 1503002341);
