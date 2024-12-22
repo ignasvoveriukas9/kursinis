@@ -4,6 +4,7 @@
 #include <cwchar>
 
 #include "EventDetector.h"
+#include "InventoryManager.h"
 #include "Price.h"
 
 class CoastlineTrader {
@@ -14,7 +15,7 @@ class CoastlineTrader {
   // mode true for long false for short
   CoastlineTrader(bool mode);
   // 1 buy, -1 sell, 0 do nothing
-  int run(int event);
+  int run(int event, double price, InventoryManager &inventoryManager);
 };
 
 #endif  // !COASTLINETRADER_H

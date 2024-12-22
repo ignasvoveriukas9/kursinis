@@ -17,7 +17,8 @@ Agent::Agent(bool mode, double deltaUp, double deltaDown, double unitSize)
 
 void Agent::run(Price price) {
   int intrinsicEvent = eventDetector.detectEvent(price.price);
-  int action = coastlineTrader.run(intrinsicEvent);
+  int action =
+      coastlineTrader.run(intrinsicEvent, price.price, inventoryManager);
 
   int probabilityIndicatorEvent =
       eventDetector.detectProbabilityIndicatorEvent(price.price);
@@ -27,10 +28,10 @@ void Agent::run(Price price) {
     inventoryManager.updateUnitSize(
         probabilityIndicator.getProbabilityIndicator());
     inventoryManager.buyOrder(price.price);
-    // TODO implement threshold adjustment;
+    // TODO implement threshold adjustment
     printf("current inventory: %f\r\n", inventoryManager.getInventorySize());
   } else if (action == -1) {
-    // TODO implement sell
-    printf("sell\r\n");
+    inventoryManager.sellPosition(price.price);
+    // TODO implement threshold adjustment
   }
 }

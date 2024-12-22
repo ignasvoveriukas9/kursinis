@@ -15,7 +15,7 @@ int main() {
   Agent agent = Agent(true, 0.01, 0.01, 1);
 
   std::vector<Price> priceList = dbManager.getPrices(
-      "test.db", "cryptoarchiveBTCUSDT", 1502942939, 1503002341);
+      "test.db", "cryptoarchiveBTCUSDT", 1502942939, 1507500000);
 
   for (int i = 0; i < priceList.size(); ++i) {
     agent.run(priceList [ i ]);

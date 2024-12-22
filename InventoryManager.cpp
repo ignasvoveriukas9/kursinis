@@ -1,5 +1,7 @@
 #include "InventoryManager.h"
 
+#include <cstdio>
+
 InventoryManager::InventoryManager(double unitSize)
     : originalUnitSize(unitSize), currentUnitSize(unitSize) {}
 
@@ -16,4 +18,20 @@ void InventoryManager::updateUnitSize(double probabilityIndicator) {
 void InventoryManager::buyOrder(double price) {
   currentInventorySize += currentUnitSize;
   currentInventoryCost += currentUnitSize * price;
+}
+
+bool InventoryManager::isProfitable(double price) {
+  if (currentInventoryCost < currentInventorySize * originalUnitSize * price) {
+    return true;
+  }
+  return false;
+}
+
+void InventoryManager::sellPosition(double price) {
+  double sellCost = currentInventorySize * originalUnitSize * price;
+
+  printf("sell position of size: %f, for %f, for profit %f\r\n",
+         currentInventorySize, sellCost, sellCost - currentInventoryCost);
+  currentInventorySize = 0;
+  currentInventoryCost = 0;
 }
