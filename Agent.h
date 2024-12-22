@@ -3,6 +3,7 @@
 
 #include "CoastlineTrader.h"
 #include "EventDetector.h"
+#include "InventoryManager.h"
 #include "Price.h"
 #include "ProbabilityIndicator.h"
 
@@ -11,12 +12,13 @@ class Agent {
   EventDetector eventDetector;
   CoastlineTrader coastlineTrader;
   ProbabilityIndicator probabilityIndicator;
+  InventoryManager inventoryManager;
   // true for long, false for short
   bool mode;
   double deltaUp, deltaDown;
 
  public:
-  Agent(bool mode, double deltaUp, double deltaDown);
+  Agent(bool mode, double deltaUp, double deltaDown, double unitSize);
   void run(Price price);
 };
 

@@ -31,12 +31,16 @@ double ProbabilityIndicator::cumulativeDistributionOfNormalDistribution(
 
 void ProbabilityIndicator::updateProbabilityIndicator(int event) {
   if (event == 1 || event == -1) {  // Directional change
+    // printf("dc\r\n");
     surprise = (weight * 0.08338161) + ((1.0 - weight) * surprise);
   } else if (event == 2 || event == -2) {  // Overshoot
+    // printf("over\r\n");
     surprise = (weight * 2.525729) + ((1.0 - weight) * surprise);
   } else {
     return;
   }
   probabilityIndicator = 1 - cumulativeDistributionOfNormalDistribution(
                                  sqrt(K) * (surprise - H1) / sqrt(H2));
+
+  // printf("Indic: %f\r\n", probabilityIndicator);
 }

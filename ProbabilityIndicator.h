@@ -3,7 +3,7 @@
 
 class ProbabilityIndicator {
  private:
-  double probabilityIndicator = 0;
+  double probabilityIndicator = 1;
   double surprise = 0;
   double weight;
   double H1, H2;
