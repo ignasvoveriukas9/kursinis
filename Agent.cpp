@@ -53,7 +53,7 @@ void Agent::run(Price price) {
     adjustThresholds();
     printf("current inventory: %f\r\n", inventoryManager.getInventorySize());
   } else if (action == -1) {
-    inventoryManager.sellPosition(price.price);
+    inventoryManager.sellPosition(price.price, mode);
     adjustThresholds();
   }
 }

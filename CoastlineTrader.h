@@ -9,11 +9,11 @@
 
 class CoastlineTrader {
  private:
-  bool mode;
+  int mode;
 
  public:
-  // mode true for long false for short
-  CoastlineTrader(bool mode);
+  // mode 1 for long -1 for short
+  CoastlineTrader(int mode);
   // 1 buy, -1 sell, 0 do nothing
   int run(int event, double price, InventoryManager &inventoryManager);
 };

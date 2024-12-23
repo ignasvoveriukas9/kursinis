@@ -16,8 +16,8 @@ class InventoryManager {
   double getInventoryCost() { return currentInventoryCost; }
   void updateUnitSize(double probabilityIndicator);
   void buyOrder(double price, double fraction);
-  bool isProfitable(double price);
-  void sellPosition(double price);
+  bool isProfitable(double price, int mode);
+  void sellPosition(double price, int mode);
 };
 
 #endif  // !INVENTORYMANAGER_H

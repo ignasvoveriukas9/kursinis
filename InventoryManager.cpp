@@ -20,18 +20,20 @@ void InventoryManager::buyOrder(double price, double fraction) {
   currentInventoryCost += currentUnitSize * fraction * price;
 }
 
-bool InventoryManager::isProfitable(double price) {
-  if (currentInventoryCost < currentInventorySize * originalUnitSize * price) {
+bool InventoryManager::isProfitable(double price, int mode) {
+  if ((double)mode * currentInventoryCost <
+      (double)mode * currentInventorySize * originalUnitSize * price) {
     return true;
   }
   return false;
 }
 
-void InventoryManager::sellPosition(double price) {
+void InventoryManager::sellPosition(double price, int mode) {
   double sellCost = currentInventorySize * originalUnitSize * price;
 
   printf("sell position of size: %f, for %f, for profit %f\r\n",
-         currentInventorySize, sellCost, sellCost - currentInventoryCost);
+         mode * currentInventorySize, sellCost,
+         (double)mode * sellCost - (double)mode * currentInventoryCost);
   currentInventorySize = 0;
   currentInventoryCost = 0;
 }
