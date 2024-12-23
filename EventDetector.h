@@ -20,6 +20,7 @@ class EventDetector {
   EventDetector(double deltaUp, double deltaDown);
   int detectEvent(double price);
   int detectProbabilityIndicatorEvent(double price);
+  void updateDelta(double deltaUp, double deltaDown);
 };
 
 #endif

@@ -17,6 +17,11 @@ void EventDetector::initProb(double price) {
   initalizedProb = true;
 }
 
+void EventDetector::updateDelta(double deltaUp, double deltaDown) {
+  this->deltaUp = deltaUp;
+  this->deltaDown = deltaDown;
+}
+
 int EventDetector::detectEvent(double price) {
   if (!initalized) {
     init(price);

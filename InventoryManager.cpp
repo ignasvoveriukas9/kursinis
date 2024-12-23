@@ -15,9 +15,9 @@ void InventoryManager::updateUnitSize(double probabilityIndicator) {
   }
 }
 
-void InventoryManager::buyOrder(double price) {
-  currentInventorySize += currentUnitSize;
-  currentInventoryCost += currentUnitSize * price;
+void InventoryManager::buyOrder(double price, double fraction) {
+  currentInventorySize += currentUnitSize * fraction;
+  currentInventoryCost += currentUnitSize * fraction * price;
 }
 
 bool InventoryManager::isProfitable(double price) {

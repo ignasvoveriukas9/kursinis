@@ -13,12 +13,15 @@ class Agent {
   CoastlineTrader coastlineTrader;
   ProbabilityIndicator probabilityIndicator;
   InventoryManager inventoryManager;
-  // true for long, false for short
-  bool mode;
-  double deltaUp, deltaDown;
+  // 1 for long, -1 for short
+  int mode;
+  double deltaOriginal;
+  double fraction = 1;
+
+  void adjustThresholds();
 
  public:
-  Agent(bool mode, double deltaUp, double deltaDown, double unitSize);
+  Agent(int mode, double delta, double unitSize);
   void run(Price price);
 };
 
