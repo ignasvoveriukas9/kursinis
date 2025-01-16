@@ -14,6 +14,9 @@ class DbFiller {
   // csv | seperated: Open timestamp|Open|...
   int fillFromCryptoarchive(char *dbFile, std::string table,
                             std::string csvFile, std::string ticker);
+
+  int fillFromByBit(char *dbFile, std::string table, std::string jsonFile,
+                    std::string ticker);
 };
 
 #endif

@@ -8,13 +8,16 @@
 #include "Price.h"
 #include "ProbabilityIndicator.h"
 
-Agent::Agent(int mode, double delta, double unitSize)
+Agent::Agent(int mode, double delta, double unitSize, std::string sellLog,
+             std::string buyLog)
     : eventDetector(delta, delta),
       coastlineTrader(mode),
       mode(mode),
       probabilityIndicator(50.0, delta),
       inventoryManager(unitSize),
-      deltaOriginal(delta) {}
+      deltaOriginal(delta),
+      sellLog(sellLog),
+      buyLog(buyLog) {}
 
 void Agent::adjustThresholds() {
   double inventorySize = inventoryManager.getInventorySize() * (double)mode;
@@ -49,11 +52,10 @@ void Agent::run(Price price) {
   if (action == 1) {
     inventoryManager.updateUnitSize(
         probabilityIndicator.getProbabilityIndicator());
-    inventoryManager.buyOrder(price.price, fraction);
+    inventoryManager.buyOrder(price, fraction, mode, buyLog);
     adjustThresholds();
-    printf("current inventory: %f\r\n", inventoryManager.getInventorySize());
   } else if (action == -1) {
-    inventoryManager.sellPosition(price.price, mode);
+    inventoryManager.sellPosition(price, mode, sellLog);
     adjustThresholds();
   }
 }

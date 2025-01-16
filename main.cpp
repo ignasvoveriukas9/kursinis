@@ -6,22 +6,30 @@
 #include <vector>
 
 #include "Agent.h"
+#include "DbFiller.h"
 #include "DbManager.h"
 #include "Price.h"
 
 int main() {
   DbManager dbManager;
 
-  Agent agent = Agent(-1, 0.01, 1);
+  Agent agentSOL3Long =
+      Agent(1, 0.03, 1,
+            "../../rez/resolution/SOL/3percent/byBitSOLUSDTLongSellLog.csv",
+            "../../rez/resolution/SOL/3percent/byBitSOLUSDTLongBuyLog.csv");
+
+  Agent agentSOL3Short =
+      Agent(-1, 0.03, 1,
+            "../../rez/resolution/SOL/3percent/byBitSOLUSDTShortSellLog.csv",
+            "../../rez/resolution/SOL/3percent/byBitSOLUSDTShortBuyLog.csv");
 
   std::vector<Price> priceList = dbManager.getPrices(
-      "test.db", "cryptoarchiveBTCUSDT", 1502942939, 1507500000);
+      "test.db", "byBit_SOLUSDT", 1715011199999, 1717344000001);
 
   for (int i = 0; i < priceList.size(); ++i) {
-    agent.run(priceList [ i ]);
+    agentSOL3Long.run(priceList [ i ]);
+    agentSOL3Short.run(priceList [ i ]);
   }
-
-  std::cout << "Hello, world!" << std::endl;
 
   return 0;
 }

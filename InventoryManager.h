@@ -1,6 +1,9 @@
 #ifndef INVENTORYMANAGER_H
 #define INVENTORYMANAGER_H
 
+#include <string>
+
+#include "Price.h"
 class InventoryManager {
  private:
   double originalUnitSize;
@@ -15,9 +18,9 @@ class InventoryManager {
   double getInventorySize() { return currentInventorySize; }
   double getInventoryCost() { return currentInventoryCost; }
   void updateUnitSize(double probabilityIndicator);
-  void buyOrder(double price, double fraction);
+  void buyOrder(Price price, double fraction, int mode, std::string log);
   bool isProfitable(double price, int mode);
-  void sellPosition(double price, int mode);
+  void sellPosition(Price price, int mode, std::string log);
 };
 
 #endif  // !INVENTORYMANAGER_H

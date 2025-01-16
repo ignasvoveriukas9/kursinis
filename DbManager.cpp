@@ -175,7 +175,7 @@ std::vector<Price> DbManager::getPrices(char *dbFile, std::string table,
     Price price;
     const char *ticker = (const char *)sqlite3_column_text(stmt, 0);
     price.ticker = ticker ? ticker : "";
-    price.time = sqlite3_column_int(stmt, 1);
+    price.time = sqlite3_column_int64(stmt, 1);
     price.price = sqlite3_column_double(stmt, 2);
     list.push_back(price);
   }
